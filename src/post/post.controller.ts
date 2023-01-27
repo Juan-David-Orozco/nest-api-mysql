@@ -1,42 +1,36 @@
 import { Controller, Delete, Get, Post, Put, Param, Body } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { CreatePostDto, EditPostDto } from './dto';
+import { PostService } from './post.service';
 
 @Controller('post')
 export class PostController {
 
+  constructor(private readonly postService: PostService) {}
+
   @Get('/')
-  getPosts(): string {
-    return `returned posts`
+  getPosts() {
+    return this.postService.getMany()
   }
 
   @Get(':id')
   getPost( @Param('id', ParseIntPipe ) postId: number ) {
-    console.log(typeof postId)
-    return {
-      message: `getPost by ${postId}`
-    }
+    return this.postService.getOne(postId)
   }
 
   @Post()
   createPost( @Body() dto: CreatePostDto ) {
-    return {
-      message: `post created`, dto
-    }
+    return this.postService.createOne(dto)
   }
 
   @Delete(':id')
-  deletePost( @Param('id') postId: string ) {
-    return {
-      message: `post deleted ${postId}`
-    }
+  deletePost( @Param('id') postId: number ) {
+    return this.postService.deleteOne(postId)
   }
 
   @Put(':id')
-  updatePost( @Param('id') postId: string, @Body() dto: EditPostDto ) {
-    return {
-      message: `post updated ${postId}`, dto
-    }
+  updatePost( @Param('id') postId: number, @Body() dto: EditPostDto ) {
+    return this.postService.editOne(postId, dto)
   }
 
 }
