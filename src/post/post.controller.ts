@@ -1,4 +1,5 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Put, Param, Body } from '@nestjs/common';
+import { CreatePostDto } from './dto';
 
 @Controller('post')
 export class PostController {
@@ -16,7 +17,8 @@ export class PostController {
   }
 
   @Post()
-  createPost( ) {
+  createPost( @Body() dto: CreatePostDto ) {
+    console.log(dto)
     return {
       message: `post created`
     }
