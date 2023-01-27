@@ -1,5 +1,6 @@
 import { Controller, Delete, Get, Post, Put, Param, Body } from '@nestjs/common';
-import { CreatePostDto } from './dto';
+import { ParseIntPipe } from '@nestjs/common/pipes';
+import { CreatePostDto, EditPostDto } from './dto';
 
 @Controller('post')
 export class PostController {
@@ -10,7 +11,8 @@ export class PostController {
   }
 
   @Get(':id')
-  getPost( @Param('id') postId: string ) {
+  getPost( @Param('id', ParseIntPipe ) postId: number ) {
+    console.log(typeof postId)
     return {
       message: `getPost by ${postId}`
     }
@@ -18,9 +20,8 @@ export class PostController {
 
   @Post()
   createPost( @Body() dto: CreatePostDto ) {
-    console.log(dto)
     return {
-      message: `post created`
+      message: `post created`, dto
     }
   }
 
@@ -32,9 +33,9 @@ export class PostController {
   }
 
   @Put(':id')
-  updatePost( @Param('id') postId: string ) {
+  updatePost( @Param('id') postId: string, @Body() dto: EditPostDto ) {
     return {
-      message: `post updated ${postId}`
+      message: `post updated ${postId}`, dto
     }
   }
 
