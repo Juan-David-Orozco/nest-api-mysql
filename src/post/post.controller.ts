@@ -9,28 +9,33 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get('/')
-  getPosts() {
-    return this.postService.getMany()
+  async getPosts() {
+    const posts = await this.postService.getMany()
+    return { msg: 'get posts', posts }
   }
 
   @Get(':id')
-  getPost( @Param('id', ParseIntPipe ) postId: number ) {
-    return this.postService.getOne(postId)
+  async getPost( @Param('id') postId: number ) {
+    const post = await this.postService.getOne(postId)
+    return { msg: 'get post', post }
   }
 
   @Post()
-  createPost( @Body() dto: CreatePostDto ) {
-    return this.postService.createOne(dto)
+  async createPost( @Body() dto: CreatePostDto ) {
+    const newPost = await this.postService.createOne(dto)
+    return { msg: 'create post', newPost }
   }
 
   @Delete(':id')
-  deletePost( @Param('id') postId: number ) {
-    return this.postService.deleteOne(postId)
+  async deletePost( @Param('id') postId: number ) {
+    const deletedPost = await this.postService.deleteOne(postId)
+    return { msg: 'delete post', deletedPost }
   }
 
   @Put(':id')
-  updatePost( @Param('id') postId: number, @Body() dto: EditPostDto ) {
-    return this.postService.editOne(postId, dto)
+  async updatePost( @Param('id') postId: number, @Body() dto: EditPostDto ) {
+    const updatedPost = await this.postService.editOne(postId, dto)
+    return { msg: 'update post', updatedPost }
   }
 
 }
